@@ -120,6 +120,8 @@ The project will use the Raspberry Pi Pico SDK and appropriate toolchains for bo
 
 Currently setting up the benchmark framework and establishing equivalent build configurations for the Cortex-M33 and Hazard3 targets.
 
+The bare-metal build/measure/disassemble environment lives in [`Benchmarks/`](Benchmarks/README.md) and currently builds for both cores with a small set of starter workloads (integer arithmetic, mul/div, memcpy, bit manipulation).
+
 ## License
 
 This project is licensed under the **GNU General Public License v3.0**.

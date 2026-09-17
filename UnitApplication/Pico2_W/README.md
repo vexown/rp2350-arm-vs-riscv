@@ -1,1 +1,0 @@
-# This is a template application based on Raspberry Pico 2 W running the FreeRTOS system

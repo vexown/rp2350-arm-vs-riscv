@@ -1,16 +1,16 @@
-[submodule "UnitApplication/Dependencies/FreeRTOS-Kernel"]
-	path = UnitApplication/Dependencies/FreeRTOS-Kernel
+[submodule "Dependencies/FreeRTOS-Kernel"]
+	path = Dependencies/FreeRTOS-Kernel
 	url = https://github.com/raspberrypi/FreeRTOS-Kernel.git
-[submodule "UnitApplication/Dependencies/pico-sdk"]
-	path = UnitApplication/Dependencies/pico-sdk
+[submodule "Dependencies/pico-sdk"]
+	path = Dependencies/pico-sdk
 	url = https://github.com/raspberrypi/pico-sdk.git
-[submodule "UnitApplication/Dependencies/picotool"]
-	path = UnitApplication/Dependencies/picotool
+[submodule "Dependencies/picotool"]
+	path = Dependencies/picotool
 	url = https://github.com/raspberrypi/picotool.git
-[submodule "UnitApplication/Dependencies/openocd"]
-	path = UnitApplication/Dependencies/openocd
+[submodule "Dependencies/openocd"]
+	path = Dependencies/openocd
 	url = https://github.com/raspberrypi/openocd.git
 	branch = sdk-2.0.0
-[submodule "UnitApplication/Dependencies/debugprobe"]
-	path = UnitApplication/Dependencies/debugprobe
+[submodule "Dependencies/debugprobe"]
+	path = Dependencies/debugprobe
 	url = https://github.com/raspberrypi/debugprobe.git
