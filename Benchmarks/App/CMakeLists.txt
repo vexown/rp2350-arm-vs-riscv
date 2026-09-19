@@ -5,6 +5,8 @@ add_executable(bench_suite
         benchmarks/bench_muldiv.c
         benchmarks/bench_memcpy.c
         benchmarks/bench_bitops.c
+        benchmarks/bench_shift_fused.c
+        benchmarks/bench_bitfield.c
 )
 
 target_include_directories(bench_suite PRIVATE

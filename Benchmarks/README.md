@@ -81,9 +81,23 @@ Tools/dump_asm.sh       # -> Results/bench_suite_{arm,riscv}.lst + symbol sizes
 
 Use the disassembly to *explain* a cycle or size delta you already measured,
 not as a standalone "which asm looks nicer" comparison - see the top-level
-README for why. `bench_bitops.c` is a good first place to look: Hazard3 has
-the Zbb bitmanip extension (native popcount/clz/rotate) while Cortex-M33 has
-a native CLZ but calls a software helper for popcount.
+README for why. Three places worth looking first, each testing an isolated
+ISA asymmetry in a different direction - and each checked against the real
+disassembly rather than left as a guess:
+
+- `bench_bitops.c` (RISC-V favoring): Hazard3's Zbb extension gives native
+  popcount/clz/rotate; Cortex-M33 has a native clz but calls a software
+  helper (`__popcountsi2`) for popcount.
+- `bench_bitfield.c` (ARM favoring): Cortex-M33's UBFX/BFI fold a bit-field
+  extract/insert into one instruction each; RISC-V needs srli+andi /
+  slli+and+and+or. 8 instructions/iteration on ARM vs 11 on RISC-V.
+- `bench_shift_fused.c` (inconclusive - and that's the interesting part):
+  written to test ARM's barrel-shifter operand fusion, it turned out a
+  near-exact tie once GCC's induction-variable strength reduction and
+  RISC-V's fused compare-and-branch were accounted for. See the comment in
+  that file for the full breakdown - it's a good example of why a single
+  synthetic snippet is a hypothesis to verify against disassembly, not a
+  conclusion on its own.
 
 ## Measurement notes
 

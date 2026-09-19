@@ -36,12 +36,16 @@ void bench_integer_arith(uint32_t iterations);
 void bench_muldiv(uint32_t iterations);
 void bench_memcpy_workload(uint32_t iterations);
 void bench_bitops(uint32_t iterations);
+void bench_shift_fused(uint32_t iterations);
+void bench_bitfield(uint32_t iterations);
 
 static const bench_entry_t benchmarks[] = {
     {"integer_arith", bench_integer_arith,   200000},
     {"muldiv",        bench_muldiv,          200000},
     {"memcpy",        bench_memcpy_workload,  50000},
     {"bitops",        bench_bitops,          200000},
+    {"shift_fused",   bench_shift_fused,     200000},
+    {"bitfield",      bench_bitfield,        200000},
 };
 
 int main(void) {
