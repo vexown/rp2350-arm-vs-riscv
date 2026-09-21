@@ -49,7 +49,19 @@ static inline uint32_t bench_cycles(void)
 
 static inline void bench_init(void)
 {
-    /* mcycle free-runs from reset on Hazard3; nothing to enable. */
+    /* Hazard3 resets mcountinhibit.CY to 1 - the cycle counter is gated off
+     * "by default to save power" (RVCSR_MCOUNTINHIBIT_CY_RESET in the SDK's
+     * rvcsr.h), so mcycle reads a constant 0 until that bit is cleared. This
+     * is the RISC-V counterpart to enabling DWT->CYCCNT on the ARM side.
+     *
+     * Raw CSR numbers rather than the SDK header, for the same reason the
+     * ARM side uses raw MMIO: 0x320 = mcountinhibit, 0xb00 = mcycle. Zero
+     * the counter while it's still inhibited, then start it, so it begins
+     * from a known 0. minstret stays inhibited - nothing here reads it. */
+    __asm__ volatile(
+        "csrw  0xb00, zero\n"  /* mcycle = 0 (still gated) */
+        "csrci 0x320, 1\n"     /* clear mcountinhibit.CY -> start counting */
+    );
 }
 
 static inline uint32_t bench_cycles(void)
