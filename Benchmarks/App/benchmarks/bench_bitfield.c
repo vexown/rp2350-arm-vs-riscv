@@ -3,12 +3,12 @@
 /* Second ARM-favoring counterweight to bench_bitops.c. Cortex-M33 has
  * single-instruction bit-field extract (UBFX) and insert (BFI) - but
  * unlike the shifted-operand trick in bench_shift_fused.c, these encode
- * the field's bit position and width as *immediates* in the instruction,
+ * the field's bit position and width as immediates in the instruction,
  * so they only fire when both are compile-time constants (as they
  * realistically are for a fixed hardware register layout - which is why
  * this benchmark uses a #define'd shift/width instead of a runtime one).
  *
- * RISC-V's Zbs gives single-*bit* set/clear/invert/extract, not
+ * RISC-V's Zbs gives single-bit set/clear/invert/extract, not
  * arbitrary-width fields, so extracting/inserting a multi-bit field is
  * still plain shift+mask (extract) / shift+mask+and+or (insert) even with
  * Zbs. This pattern - unpacking/repacking a field inside a status or
@@ -26,11 +26,13 @@
 #define BENCH_FIELD_WIDTH 5u
 #define BENCH_FIELD_MASK  ((1u << BENCH_FIELD_WIDTH) - 1u)
 
-void bench_bitfield(uint32_t iterations) {
+void bench_bitfield(uint32_t iterations)
+{
     uint32_t reg = bench_seed;
     uint32_t acc = 0;
 
-    for (uint32_t i = 0; i < iterations; i++) {
+    for (uint32_t i = 0; i < iterations; i++)
+    {
         /* Extract: candidate for UBFX on ARM. */
         uint32_t field = (reg >> BENCH_FIELD_SHIFT) & BENCH_FIELD_MASK;
         acc += field;

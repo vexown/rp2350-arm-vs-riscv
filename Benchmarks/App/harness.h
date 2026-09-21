@@ -31,13 +31,15 @@
 #define BENCH_DEMCR_TRCENA       (1u << 24)
 #define BENCH_DWT_CTRL_CYCCNTENA (1u << 0)
 
-static inline void bench_init(void) {
+static inline void bench_init(void)
+{
     BENCH_DEMCR |= BENCH_DEMCR_TRCENA;
     BENCH_DWT_CYCCNT = 0;
     BENCH_DWT_CTRL |= BENCH_DWT_CTRL_CYCCNTENA;
 }
 
-static inline uint32_t bench_cycles(void) {
+static inline uint32_t bench_cycles(void)
+{
     return BENCH_DWT_CYCCNT;
 }
 
@@ -45,11 +47,13 @@ static inline uint32_t bench_cycles(void) {
 
 #define BENCH_ARCH_NAME "riscv-hazard3"
 
-static inline void bench_init(void) {
+static inline void bench_init(void)
+{
     /* mcycle free-runs from reset on Hazard3; nothing to enable. */
 }
 
-static inline uint32_t bench_cycles(void) {
+static inline uint32_t bench_cycles(void)
+{
     uint32_t cycles;
     __asm__ volatile("csrr %0, mcycle" : "=r"(cycles));
     return cycles;

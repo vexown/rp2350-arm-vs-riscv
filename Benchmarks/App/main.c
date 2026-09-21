@@ -26,7 +26,8 @@
 
 typedef void (*bench_fn_t)(uint32_t iterations);
 
-typedef struct {
+typedef struct
+{
     const char *name;
     bench_fn_t fn;
     uint32_t iterations;
@@ -48,7 +49,8 @@ static const bench_entry_t benchmarks[] = {
     {"bitfield",      bench_bitfield,        200000},
 };
 
-int main(void) {
+int main(void)
+{
     stdio_init_all();
     bench_init();
 
@@ -59,7 +61,8 @@ int main(void) {
     printf("arch=%s\n", BENCH_ARCH_NAME);
     printf("name,iterations,cycles,us\n");
 
-    for (unsigned i = 0; i < sizeof(benchmarks) / sizeof(benchmarks[0]); i++) {
+    for (unsigned i = 0; i < sizeof(benchmarks) / sizeof(benchmarks[0]); i++)
+    {
         const bench_entry_t *b = &benchmarks[i];
 
         uint32_t c0 = bench_cycles();
@@ -77,7 +80,8 @@ int main(void) {
 
     printf("done\n");
 
-    while (true) {
+    while (true)
+    {
         tight_loop_contents();
     }
 }

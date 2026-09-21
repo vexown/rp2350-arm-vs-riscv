@@ -32,12 +32,14 @@
  * stream are doing, so treat any single synthetic benchmark as a
  * starting hypothesis to check against real disassembly, not a verdict.
  */
-void bench_shift_fused(uint32_t iterations) {
+void bench_shift_fused(uint32_t iterations)
+{
     uint32_t a = bench_seed;
     uint32_t b = bench_seed ^ 0x9E3779B9u;
     uint32_t acc = 0;
 
-    for (uint32_t i = 0; i < iterations; i++) {
+    for (uint32_t i = 0; i < iterations; i++)
+    {
         acc += a ^ (b << 5);
         acc += b & (a >> 6);
         acc -= a | (b << 7);
