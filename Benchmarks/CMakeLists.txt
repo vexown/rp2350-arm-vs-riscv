@@ -12,12 +12,28 @@
 # ****************************************************************************
 cmake_minimum_required(VERSION 3.13)
 
-# Reuse the pico-sdk vendored (as a submodule) under the shared top-level
-# Dependencies/, unless the caller has already pointed PICO_SDK_PATH
-# elsewhere.
-if (NOT DEFINED ENV{PICO_SDK_PATH} AND NOT PICO_SDK_PATH)
-    get_filename_component(PICO_SDK_PATH
+# Use the pico-sdk vendored (as a submodule) under the shared top-level
+# Dependencies/. The pinned revision is authoritative: cycle counts and code
+# sizes are only comparable against a known SDK, so an ambient PICO_SDK_PATH
+# in the environment (a machine-wide SDK checkout from some other project)
+# must not silently swap it out. An explicit -DPICO_SDK_PATH= on the command
+# line still wins, for deliberately testing against a different SDK.
+if (NOT PICO_SDK_PATH)
+    get_filename_component(VENDORED_PICO_SDK_PATH
             "${CMAKE_CURRENT_LIST_DIR}/../Dependencies/pico-sdk" ABSOLUTE)
+    if (EXISTS "${VENDORED_PICO_SDK_PATH}/pico_sdk_init.cmake")
+        if (DEFINED ENV{PICO_SDK_PATH})
+            message(STATUS "Ignoring PICO_SDK_PATH=$ENV{PICO_SDK_PATH} from the "
+                    "environment in favour of the pinned submodule "
+                    "(pass -DPICO_SDK_PATH=... to override deliberately)")
+        endif ()
+        set(PICO_SDK_PATH "${VENDORED_PICO_SDK_PATH}")
+    elseif (NOT DEFINED ENV{PICO_SDK_PATH})
+        message(FATAL_ERROR
+                "Dependencies/pico-sdk is not checked out. Run ./build.sh, "
+                "which bootstraps it, or:\n"
+                "  git submodule update --init --recursive Dependencies/pico-sdk")
+    endif ()
 endif ()
 
 include(pico_sdk_import.cmake)

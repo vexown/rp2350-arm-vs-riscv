@@ -7,7 +7,11 @@ cycle count reflects the CPU core and the compiler, not scheduler/driver
 overhead. See the top-level [README](../README.md) for the project's goals.
 
 Uses the pico-sdk/OpenOCD/debugprobe/picotool submodules vendored in the
-top-level [`Dependencies/`](../Dependencies).
+top-level [`Dependencies/`](../Dependencies). The pinned pico-sdk revision is
+authoritative - `./build.sh` checks it out on first run and passes it to CMake
+explicitly, so a `PICO_SDK_PATH` left in your environment by some other project
+won't silently swap the SDK out from under a comparison. Pass
+`-DPICO_SDK_PATH=...` if you actually want to build against a different one.
 
 ## Layout
 
@@ -53,6 +57,10 @@ Produces `build-arm/App/bench_suite.uf2` and `build-riscv/App/bench_suite.uf2`.
 Both are built with `CMAKE_BUILD_TYPE=Release` by default (`BUILD_TYPE=Debug
 ./build.sh` to override) - keep this the same across both when comparing, since
 it's the single biggest lever on the numbers.
+
+A fresh clone needs nothing else: `build.sh` checks out the vendored pico-sdk
+(recursively - the USB-CDC output needs its nested tinyusb) and installs the
+RISC-V toolchain, if either is missing.
 
 ## Flash and capture results
 
