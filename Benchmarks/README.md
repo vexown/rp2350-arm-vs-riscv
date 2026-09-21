@@ -24,6 +24,7 @@ Benchmarks/
     benchmarks/              one workload per file
   Tools/
     compare_size.sh        text/data/bss size, both architectures side by side
+    compare_results.py     two captured runs side by side, us ratio + cyc/iter
     dump_asm.sh             annotated disassembly + symbol sizes -> Results/
     capture_serial.py       save one benchmark run's CSV output -> Results/
     install_riscv_toolchain.sh  fetches riscv32-unknown-elf-gcc (auto-run by build.sh)
@@ -94,7 +95,14 @@ RISC-V toolchain, if either is missing.
    complete run, writing `Results/<arch>_<timestamp>.csv` with rows of
    `name,iterations,cycles,us`. A run cut short by a disconnect is saved as
    `..._partial.csv` rather than discarded.
-4. Repeat for the other architecture's `.uf2`, then diff/plot the two CSVs.
+4. Repeat for the other architecture's `.uf2`, then compare the two runs:
+   ```sh
+   python3 Tools/compare_results.py          # newest run of each architecture
+   ```
+   Ratios and the winner come from the microsecond column (the fair
+   cross-architecture number); cycles per iteration are printed alongside
+   because that's what explains a delta. Pass two paths explicitly to compare
+   specific runs.
 
 ## Compare code size and disassembly
 
