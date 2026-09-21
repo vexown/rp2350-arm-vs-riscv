@@ -29,6 +29,8 @@ Benchmarks/
     capture_serial.py       save one benchmark run's CSV output -> Results/
     install_riscv_toolchain.sh  fetches riscv32-unknown-elf-gcc (auto-run by build.sh)
   Results/                (gitignored) captured .csv/.lst output lands here
+  Measurements/           committed raw runs, so the numbers can be read
+                            without building - conditions only, no analysis
   build.sh                configures + builds both architectures
 ```
 

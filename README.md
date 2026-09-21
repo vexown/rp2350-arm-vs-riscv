@@ -127,6 +127,12 @@ Currently setting up the benchmark framework and establishing equivalent build c
 
 The bare-metal build/measure/disassemble environment lives in [`Benchmarks/`](Benchmarks/README.md) and currently builds for both cores with a small set of starter workloads (integer arithmetic, mul/div, memcpy, bit manipulation).
 
+Raw measurements from real hardware are committed under
+[`Benchmarks/Measurements/`](Benchmarks/Measurements/README.md) - the CSVs as
+captured, with the build and board conditions recorded alongside them and no
+analysis attached, so you can read the numbers without building anything and
+interpret them yourself.
+
 ## License
 
 This project is licensed under the **GNU General Public License v3.0**.
