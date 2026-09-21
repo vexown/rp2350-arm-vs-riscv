@@ -9,6 +9,13 @@ REPO_ROOT="$(cd "$ROOT/.." && pwd)"
 PICO_SDK_DIR="$REPO_ROOT/Dependencies/pico-sdk"
 RISCV_TOOLCHAIN_BIN="${RISCV_TOOLCHAIN_BIN:-$HOME/.pico-sdk/toolchain/15/bin}"
 BUILD_TYPE="${BUILD_TYPE:-Release}"
+# Pinned rather than left to the SDK's default so the board is a recorded
+# build input like the SDK revision, not a guess. pico2 over pico2_w: the
+# compiled output is identical either way (the boards differ only in LED and
+# CYW43 wiring, none of which this suite touches), but on pico2_w the LED
+# lives behind the CYW43 chip, so using it as a scope trigger later would drag
+# the wireless stack into a deliberately bare-metal suite.
+PICO_BOARD="${PICO_BOARD:-pico2}"
 
 # A plain `git clone` leaves the submodules empty, and the suite is pinned to
 # this exact SDK revision - so bootstrap it here rather than leaving it as a
@@ -26,17 +33,19 @@ if [ ! -x "$RISCV_TOOLCHAIN_BIN/riscv32-unknown-elf-gcc" ]; then
     RISCV_TOOLCHAIN_BIN="$RISCV_TOOLCHAIN_BIN" "$ROOT/Tools/install_riscv_toolchain.sh"
 fi
 
-echo "== ARM (Cortex-M33), build type: $BUILD_TYPE =="
+echo "== ARM (Cortex-M33), board: $PICO_BOARD, build type: $BUILD_TYPE =="
 cmake -S "$ROOT" -B "$ROOT/build-arm" \
     -DPICO_SDK_PATH="$PICO_SDK_DIR" \
+    -DPICO_BOARD="$PICO_BOARD" \
     -DPICO_PLATFORM=rp2350-arm-s \
     -DCMAKE_BUILD_TYPE="$BUILD_TYPE"
 cmake --build "$ROOT/build-arm" -j"$(nproc)"
 
 echo
-echo "== RISC-V (Hazard3), build type: $BUILD_TYPE =="
+echo "== RISC-V (Hazard3), board: $PICO_BOARD, build type: $BUILD_TYPE =="
 cmake -S "$ROOT" -B "$ROOT/build-riscv" \
     -DPICO_SDK_PATH="$PICO_SDK_DIR" \
+    -DPICO_BOARD="$PICO_BOARD" \
     -DPICO_PLATFORM=rp2350-riscv \
     -DPICO_TOOLCHAIN_PATH="$RISCV_TOOLCHAIN_BIN" \
     -DCMAKE_BUILD_TYPE="$BUILD_TYPE"

@@ -58,6 +58,16 @@ Both are built with `CMAKE_BUILD_TYPE=Release` by default (`BUILD_TYPE=Debug
 ./build.sh` to override) - keep this the same across both when comparing, since
 it's the single biggest lever on the numbers.
 
+The board is pinned to `PICO_BOARD=pico2` rather than left to the SDK's
+default, so it's a recorded build input alongside the SDK revision
+(`PICO_BOARD=pico2_w ./build.sh` to override). The choice doesn't affect the
+measurements - building for `pico2_w` changes exactly two bytes of the
+binary, the board-name string in the binary-info block, since the boards
+differ only in LED and CYW43 wiring and this suite touches neither. It
+matters for what comes later: on a Pico 2 W the LED sits behind the CYW43
+chip, so driving it as a progress indicator or scope trigger would mean
+linking the wireless stack into a deliberately bare-metal suite.
+
 A fresh clone needs nothing else: `build.sh` checks out the vendored pico-sdk
 (recursively - the USB-CDC output needs its nested tinyusb) and installs the
 RISC-V toolchain, if either is missing.
