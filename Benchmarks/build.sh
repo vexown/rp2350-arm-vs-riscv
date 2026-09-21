@@ -10,12 +10,15 @@ PICO_SDK_DIR="$REPO_ROOT/Dependencies/pico-sdk"
 RISCV_TOOLCHAIN_BIN="${RISCV_TOOLCHAIN_BIN:-$HOME/.pico-sdk/toolchain/15/bin}"
 BUILD_TYPE="${BUILD_TYPE:-Release}"
 # Pinned rather than left to the SDK's default so the board is a recorded
-# build input like the SDK revision, not a guess. pico2 over pico2_w: the
-# compiled output is identical either way (the boards differ only in LED and
-# CYW43 wiring, none of which this suite touches), but on pico2_w the LED
-# lives behind the CYW43 chip, so using it as a scope trigger later would drag
-# the wireless stack into a deliberately bare-metal suite.
-PICO_BOARD="${PICO_BOARD:-pico2}"
+# build input like the SDK revision, not a guess. This is the hardware the
+# numbers are measured on; pico2 builds identically (the boards differ only in
+# LED and CYW43 wiring, neither of which this suite touches - the compiled
+# output differs by two bytes, the board name in the binary-info block). The one
+# thing to remember on pico2_w: GPIO 23/24/25/29 belong to the CYW43 chip and
+# the onboard LED is behind it, so a future scope trigger or progress
+# indicator wants a spare GPIO, not the LED - driving the LED would mean
+# linking the wireless stack into a deliberately bare-metal suite.
+PICO_BOARD="${PICO_BOARD:-pico2_w}"
 
 # A plain `git clone` leaves the submodules empty, and the suite is pinned to
 # this exact SDK revision - so bootstrap it here rather than leaving it as a

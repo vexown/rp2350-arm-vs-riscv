@@ -58,15 +58,18 @@ Both are built with `CMAKE_BUILD_TYPE=Release` by default (`BUILD_TYPE=Debug
 ./build.sh` to override) - keep this the same across both when comparing, since
 it's the single biggest lever on the numbers.
 
-The board is pinned to `PICO_BOARD=pico2` rather than left to the SDK's
+The board is pinned to `PICO_BOARD=pico2_w` rather than left to the SDK's
 default, so it's a recorded build input alongside the SDK revision
-(`PICO_BOARD=pico2_w ./build.sh` to override). The choice doesn't affect the
-measurements - building for `pico2_w` changes exactly two bytes of the
-binary, the board-name string in the binary-info block, since the boards
-differ only in LED and CYW43 wiring and this suite touches neither. It
-matters for what comes later: on a Pico 2 W the LED sits behind the CYW43
-chip, so driving it as a progress indicator or scope trigger would mean
-linking the wireless stack into a deliberately bare-metal suite.
+(`PICO_BOARD=pico2 ./build.sh` to override). The choice doesn't affect the
+measurements - a `pico2` build differs by exactly two bytes, the board-name
+string in the binary-info block, since the boards differ only in LED and
+CYW43 wiring and this suite touches neither. The wireless chip is never
+powered up: nothing here links `pico_cyw43_arch`.
+
+Worth knowing on a Pico 2 W, though, if you extend the suite: **GPIO
+23/24/25/29 belong to the CYW43 chip** and the onboard LED sits behind it. A
+scope trigger or progress indicator wants a spare GPIO - driving the LED
+would mean linking the wireless stack into a deliberately bare-metal suite.
 
 A fresh clone needs nothing else: `build.sh` checks out the vendored pico-sdk
 (recursively - the USB-CDC output needs its nested tinyusb) and installs the
@@ -74,7 +77,7 @@ RISC-V toolchain, if either is missing.
 
 ## Flash and capture results
 
-1. Hold BOOTSEL, plug in the Pico 2 (or `picotool reboot -u -f` if it's
+1. Hold BOOTSEL, plug in the Pico 2 W (or `picotool reboot -u -f` if it's
    already running a UF2), then copy the `.uf2` onto the mass-storage drive
    that appears - or `picotool load build-arm/App/bench_suite.uf2` /
    OpenOCD with a debug probe if you have one wired up.

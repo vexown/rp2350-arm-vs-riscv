@@ -108,10 +108,12 @@ For a lot of ordinary MCU firmware, the expectation is that the difference will 
 This project is an attempt to find out where that assumption stops being true.
 
 ## Hardware
-* Raspberry Pi Pico 2 (the benchmark suite pins `PICO_BOARD=pico2`; see
-  [`Benchmarks/README.md`](Benchmarks/README.md) for why, and how to override)
+* Raspberry Pi Pico 2 W (the benchmark suite pins `PICO_BOARD=pico2_w`; see
+  [`Benchmarks/README.md`](Benchmarks/README.md) for why, and how to override).
+  The wireless side goes unused - the suite is bare-metal and never powers up
+  the CYW43 chip.
 * Any other RP2350 board should work, but the published numbers are measured
-  on a Pico 2
+  on a Pico 2 W
 
 ## Software
 
