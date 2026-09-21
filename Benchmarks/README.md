@@ -87,10 +87,13 @@ RISC-V toolchain, if either is missing.
    ```sh
    python3 Tools/capture_serial.py /dev/ttyACM0
    ```
-   Reset the board first if you don't see output - `main.c` waits 3s after
-   boot before printing so the host has time to open the port. This writes
-   `Results/<arch>_<timestamp>.csv` with rows of
-   `name,iterations,cycles,us`.
+   Start it whenever - it waits for the port to appear rather than failing if
+   the board isn't plugged in yet, and it reconnects when the board
+   re-enumerates, so resetting to trigger a run is the expected workflow
+   (`main.c` waits 3s after boot before printing). It exits after one
+   complete run, writing `Results/<arch>_<timestamp>.csv` with rows of
+   `name,iterations,cycles,us`. A run cut short by a disconnect is saved as
+   `..._partial.csv` rather than discarded.
 4. Repeat for the other architecture's `.uf2`, then diff/plot the two CSVs.
 
 ## Compare code size and disassembly
